@@ -3,6 +3,7 @@ import SelectFilter from "../components/SelectFilter"
 import SearchBar from "../components/SearchBar"
 import PrimaryButton from "../components/PrimaryButton"
 import ProductCard from "../components/ProductCard"
+import { ModalProduct } from "../components/ModalProduct"
 
 export default function Dashboard() {
   return (
@@ -31,11 +32,12 @@ export default function Dashboard() {
       </div> */}
 
       {/* Container principal */}
-      <div className="flex justify-between mt-10 gap-6 h-[70vh]">
+      <div className="flex justify-between mt-10 gap-6 h-[70vh] relative">
+        <ModalProduct />
         {/* 🟩 Painel de assinaturas */}
         <div className="bg-zinc-800 border border-zinc-500 rounded-lg p-4 flex flex-col w-11/12">
           {/* filtros e pesquisa - FIXOS */}
-          <div className="flex gap-2 mb-4 shrink-0 border border-red-500 w-full">
+          <div className="flex gap-2 mb-4 shrink-0 w-full">
             <SelectFilter />
             <SearchBar />
             <PrimaryButton
@@ -95,7 +97,7 @@ export default function Dashboard() {
         {/* 🟦 Painel de resumo */}
         <div className="bg-zinc-800 border border-zinc-500 rounded-lg p-5 w-1/2 flex flex-col justify-between h-[70vh]">
           <div>
-            <h4 className="text-white text-lg font-semibold mb-2">Resumo</h4>
+            <h4 className="text-white text-2xl font-semibold mb-2">Resumo</h4>
             <p className="text-zinc-400 mb-4">Visão rápida dos seus gastos.</p>
 
             <div className="text-zinc-300 text-sm space-y-2">
@@ -113,7 +115,7 @@ export default function Dashboard() {
           </div>
 
           <div className="text-zinc-400 text-sm mt-4">
-            <p className="font-semibold text-white mb-2">Próximos pagamentos</p>
+            <p className="font-semibold text-white mb-2">Próximos pagamentos:</p>
             <p>Netflix — 5 dias</p>
           </div>
         </div>
