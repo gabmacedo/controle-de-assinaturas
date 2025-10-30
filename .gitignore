@@ -28,3 +28,5 @@ deps/
 backend/serviceAccountKey.json
 serviceAccountKey.json
 frontend/.env
+vite/
+.vite
