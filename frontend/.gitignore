@@ -24,4 +24,4 @@ dist-ssr
 *.sln
 *.sw?
 deps/
-serviceAccountKey.json
+backend/serviceAccountKey.json
