@@ -4,17 +4,22 @@ import SearchBar from "../components/SearchBar"
 import PrimaryButton from "../components/PrimaryButton"
 import ProductCard from "../components/ProductCard"
 import { ModalProduct } from "../components/ModalProduct"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { signOut } from "firebase/auth"
 import { auth } from "../firebase/firebase.js"
 import { useNavigate } from "react-router-dom"
-import { criarAssinatura } from "../firebase/firebaseUtils.js"
+import {
+  criarAssinatura,
+  buscarAssinaturas,
+} from "../firebase/firebaseUtils.js"
 import { useAuth } from "../Context/AuthContext.jsx"
 
 export default function Dashboard() {
   const navigate = useNavigate()
   const { user } = useAuth()
   const [isModalOpen, setIsModalOpen] = useState(false)
+  const [assinaturas, setAssinaturas] = useState([])
+  const [loadingAssinaturas, setLoadingAssinaturas] = useState(true)
 
   async function handleLogout() {
     try {
@@ -27,13 +32,29 @@ export default function Dashboard() {
 
   async function handleCriarAssinatura(dados) {
     try {
-      await criarAssinatura(user.uid, dados)
-      console.log("assinatura criada")
+      const nova = await criarAssinatura(user.uid, dados)
+      setAssinaturas((prev) => [nova, ...prev])
       setIsModalOpen(false)
     } catch (error) {
       console.error("erro ao criar:", error.code, error.message)
     }
   }
+
+  useEffect(() => {
+    async function carregarAssinaturas() {
+      if (!user?.uid) return
+
+      try {
+        const data = await buscarAssinaturas(user.uid)
+        setAssinaturas(data)
+      } catch (error) {
+        console.error("erro ao carregar assinaturas", error.message)
+      } finally {
+        setLoadingAssinaturas(false)
+      }
+    }
+    carregarAssinaturas()
+  }, [user])
 
   return (
     <section className="min-h-screen w-screen bg-zinc-900 p-10 font-inter">
@@ -72,14 +93,25 @@ export default function Dashboard() {
 
           {/* lista de produtos com SCROLL */}
           <div className="flex-1 overflow-y-auto pr-2 custom-scroll">
-            <ProductCard
-              prodName="Netflix"
-              prodDesc="Plano Padrão"
-              prodDate="12"
-              prodPayment="Cobrança mensal"
-              prodStatus="Ativa"
-              prodPrice="29,90"
-            />
+            {loadingAssinaturas ? (
+              <p className="text-zinc-400">Carregando assinaturas...</p>
+            ) : Array.isArray(assinaturas) && assinaturas.length > 0 ? (
+              assinaturas.map((item) => (
+                <ProductCard
+                  key={item.id}
+                  prodName={item.nome}
+                  prodDesc={item.observacoes || "Sem descrição"}
+                  prodDate={item.vencimento || "-"}
+                  prodPayment={`Cobrança ${item.tipo.toLowerCase()}`}
+                  prodStatus={item.status}
+                  prodPrice={item.preco ? item.preco.toFixed(2) : "0.00"}
+                />
+              ))
+            ) : (
+              <p className="text-zinc-400">
+                Nenhuma assinatura cadastrada ainda.
+              </p>
+            )}
           </div>
         </div>
 
@@ -91,14 +123,15 @@ export default function Dashboard() {
 
             <div className="text-zinc-300 text-sm space-y-2">
               <p>
-                <span className="font-semibold">Mensal (somado):</span> R$ 46,80
+                <span className="font-semibold">Mensal (somado):</span> Em breve
               </p>
               <p>
-                <span className="font-semibold">Gasto anual estimado:</span> R$
-                561,60
+                <span className="font-semibold">Gasto anual estimado:</span> Em
+                breve
               </p>
               <p>
-                <span className="font-semibold">Assinaturas ativas:</span> 2
+                <span className="font-semibold">Assinaturas ativas:</span> Em
+                breve
               </p>
             </div>
           </div>
@@ -107,7 +140,7 @@ export default function Dashboard() {
             <p className="font-semibold text-white mb-2">
               Próximos pagamentos:
             </p>
-            <p>Netflix — 5 dias</p>
+            <p>Em breve</p>
           </div>
         </div>
       </div>

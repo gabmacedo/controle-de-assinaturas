@@ -28,3 +28,26 @@ export const criarAssinatura = async (userId, dados) => {
     throw error
   }
 }
+
+// read
+export const buscarAssinaturas = async (userId) => {
+  try {
+    const read = query(
+      collection(db, "assinaturas"),
+      where("userId", "==", userId)
+      //   orderBy("criadoEm", "desc")
+    )
+
+    const snapshot = await getDocs(read)
+
+    const assinaturas = snapshot.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    }))
+
+    return assinaturas || []
+  } catch (error) {
+    console.error("erro ao buscar assinatura:", error)
+    return []
+  }
+}

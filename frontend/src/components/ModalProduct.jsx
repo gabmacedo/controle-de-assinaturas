@@ -49,7 +49,7 @@ export function ModalProduct({ isOpen, onClose, onSave }) {
             />
 
             <SelectFilter
-              options={["Mensal", "Anual"]}
+              options={["Mensal"]}
               defaultValue={tipo}
               onChange={(e) => setTipo(e.target.value)}
             />
