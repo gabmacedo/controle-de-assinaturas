@@ -1,4 +1,4 @@
-import { LogOut, CirclePlus } from "lucide-react"
+import { LogOut, CirclePlus, Loader } from "lucide-react"
 import SelectFilter from "../components/SelectFilter"
 import SearchBar from "../components/SearchBar"
 import PrimaryButton from "../components/PrimaryButton"
@@ -11,6 +11,7 @@ import { useNavigate } from "react-router-dom"
 import {
   criarAssinatura,
   buscarAssinaturas,
+  deletarAssinatura,
 } from "../firebase/firebaseUtils.js"
 import { useAuth } from "../Context/AuthContext.jsx"
 
@@ -20,14 +21,18 @@ export default function Dashboard() {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [assinaturas, setAssinaturas] = useState([])
   const [loadingAssinaturas, setLoadingAssinaturas] = useState(true)
+  const [buttonLoad, setButtonLoad] = useState("Deslogar")
 
   async function handleLogout() {
-    try {
-      await signOut(auth)
-      navigate("/")
-    } catch (error) {
-      console.error("erro ao sair:", error.message)
-    }
+    setButtonLoad(<Loader className="animate-spin" />)
+    setTimeout(async () => {
+      try {
+        await signOut(auth)
+        navigate("/")
+      } catch (error) {
+        console.error("erro ao sair:", error.message)
+      }
+    }, 1500)
   }
 
   async function handleCriarAssinatura(dados) {
@@ -68,7 +73,7 @@ export default function Dashboard() {
         >
           <LogOut size={18} />
           <button onClick={handleLogout} className="cursor-pointer">
-            Deslogar
+            {buttonLoad}
           </button>
         </div>
       </header>

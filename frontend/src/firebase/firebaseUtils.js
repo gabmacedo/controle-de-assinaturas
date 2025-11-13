@@ -51,3 +51,12 @@ export const buscarAssinaturas = async (userId) => {
     return []
   }
 }
+
+// delete
+export const deletarAssinatura = async (id) => {
+  try {
+    await deleteDoc(doc(db, "assinaturas", id))
+  } catch (error) {
+    console.error(error.message)
+  }
+}

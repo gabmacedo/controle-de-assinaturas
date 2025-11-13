@@ -7,6 +7,7 @@ export default function ProductCard({
   prodPayment,
   prodStatus,
   prodPrice,
+  onDelete,
 }) {
   return (
     <div className="flex justify-between items-center bg-zinc-900 border border-zinc-700 rounded-xl p-4 mb-3 w-full hover:bg-zinc-800 transition">
@@ -38,7 +39,10 @@ export default function ProductCard({
           <button className="border border-zinc-700 hover:bg-zinc-500 text-white p-2 rounded-md cursor-pointer">
             <Play size={16} />
           </button>
-          <button className="bg-red-500 border hover:bg-red-600 text-red-950 p-2 rounded-md cursor-pointer">
+          <button
+            className="bg-red-500 border hover:bg-red-600 text-red-950 p-2 rounded-md cursor-pointer"
+            onClick={onDelete}
+          >
             <Trash2 size={16} />
           </button>
         </div>
