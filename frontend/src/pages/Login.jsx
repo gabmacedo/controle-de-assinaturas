@@ -1,23 +1,36 @@
-import { Lock, Mail } from "lucide-react";
-import AuthInput from "../components/AuthInput";
-import PrimaryButton from "../components/PrimaryButton";
-import { Link } from "react-router-dom";
-import { loginUser } from "../firebase";
-import { useState } from "react";
+import { Lock, Mail, Loader } from "lucide-react"
+import AuthInput from "../components/AuthInput"
+import PrimaryButton from "../components/PrimaryButton"
+import { Link, useNavigate } from "react-router-dom"
+import { loginUser } from "../firebase/firebase"
+import { useEffect, useState } from "react"
+import { useAuth } from "../Context/AuthContext"
 
 export default function Login() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const { user } = useAuth()
+  const navigate = useNavigate()
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
+  const [buttonLoad, setButtonLoad] = useState("Entrar")
+
+  useEffect(() => {
+    if (user) {
+      navigate("/dashboard")
+    }
+  }, [user, navigate])
 
   async function handleLogin() {
-    try {
-      const userCredential = await loginUser(email, password);
-      console.log("logado:", userCredential.user);
-      const token = await userCredential.user.getIdToken();
-      console.log("token:", token);
-    } catch (error) {
-      console.error("erro no login:", error.message);
-    }
+    setButtonLoad(<Loader className="animate-spin" />)
+    setTimeout(async () => {
+      try {
+        const userCredential = await loginUser(email, password)
+        const token = await userCredential.user.getIdToken()
+        console.log("token:", token)
+        navigate("/dashboard")
+      } catch (error) {
+        console.error("erro no login:", error.message)
+      }
+    }, 2000)
   }
 
   return (
@@ -62,7 +75,7 @@ export default function Login() {
             />
 
             <PrimaryButton
-              value={"Entrar"}
+              value={buttonLoad}
               heigth={16}
               width={96}
               onClick={handleLogin}
@@ -80,5 +93,5 @@ export default function Login() {
         </div>
       </div>
     </section>
-  );
+  )
 }

@@ -1,31 +1,40 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
-import { registerUser } from "../firebase";
-import { Lock, Mail, User, Loader } from "lucide-react";
-import AuthInput from "../components/AuthInput";
-import PrimaryButton from "../components/PrimaryButton";
-import ModalSuccessful from "../components/ModalSuccessful";
+import { useState } from "react"
+import { Link } from "react-router-dom"
+import { registerUser } from "../firebase/firebase"
+import { Lock, Mail, User, Loader } from "lucide-react"
+import AuthInput from "../components/AuthInput"
+import PrimaryButton from "../components/PrimaryButton"
+import ModalSuccessful from "../components/ModalSuccessful"
 
 export default function Registro() {
-  const [nome, setNome] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [buttonLoad, setButtonLoad] = useState("Criar Conta");
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [nome, setNome] = useState("")
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
+  const [buttonLoad, setButtonLoad] = useState("Criar Conta")
+  const [isModalOpen, setIsModalOpen] = useState(false)
 
   async function handleRegistro(e) {
-    e.preventDefault();
+    e.preventDefault()
+
     try {
-      setButtonLoad(<Loader className="animate-spin" />);
-      const userCredential = await registerUser(email, password, nome);
-      console.log("Usuário criado:", userCredential.user.displayName);
-      setNome("");
-      setEmail("");
-      setPassword("");
-      setIsModalOpen(true);
+      if (!nome || !email || !password) {
+        return
+      }
+
+      if (nome.length >= 2) {
+        alert("Insira um nome válido.")
+      }
+
+      setButtonLoad(<Loader className="animate-spin" />)
+      const userCredential = await registerUser(email, password, nome)
+      console.log("Usuário criado:", userCredential.user.displayName)
+      setNome("")
+      setEmail("")
+      setPassword("")
+      setIsModalOpen(true)
     } catch (error) {
-      setButtonLoad("Criar Conta");
-      console.error("Erro no cadastro:", error.code, error.message);
+      setButtonLoad("Criar Conta")
+      console.error("Erro no cadastro:", error.code, error.message)
     }
   }
 
@@ -81,6 +90,16 @@ export default function Registro() {
                 icon={<Lock size={20} />}
               />
 
+              <ul className="list-disc ml-5">
+                <li
+                  className={
+                    password.length > 6 ? "text-green-300" : "text-red-300"
+                  }
+                >
+                  Minimo de 6 caracteres.
+                </li>
+              </ul>
+
               <PrimaryButton value={buttonLoad} heigth={16} width={96} />
             </div>
             <p className="text-center mt-2">
@@ -100,5 +119,5 @@ export default function Registro() {
         onClose={() => setIsModalOpen(false)}
       />
     </section>
-  );
+  )
 }

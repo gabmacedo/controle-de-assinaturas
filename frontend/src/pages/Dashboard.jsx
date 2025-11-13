@@ -1,13 +1,27 @@
-import { LogOut, CirclePlus } from "lucide-react";
-import SelectFilter from "../components/SelectFilter";
-import SearchBar from "../components/SearchBar";
-import PrimaryButton from "../components/PrimaryButton";
-import ProductCard from "../components/ProductCard";
-import { ModalProduct } from "../components/ModalProduct";
-import { useState } from "react";
+import { LogOut, CirclePlus } from "lucide-react"
+import SelectFilter from "../components/SelectFilter"
+import SearchBar from "../components/SearchBar"
+import PrimaryButton from "../components/PrimaryButton"
+import ProductCard from "../components/ProductCard"
+import { ModalProduct } from "../components/ModalProduct"
+import { useState } from "react"
+import { signOut } from "firebase/auth"
+import { auth } from "../firebase"
+import { useNavigate } from "react-router-dom"
 
 export default function Dashboard() {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const navigate = useNavigate()
+
+  async function handleLogout() {
+    try {
+      await signOut(auth)
+      navigate("/")
+    } catch (error) {
+      console.error("erro ao sair:", error.message)
+    }
+  }
+
+  const [isModalOpen, setIsModalOpen] = useState(false)
 
   return (
     <section className="min-h-screen w-screen bg-zinc-900 p-10 font-inter">
@@ -20,7 +34,9 @@ export default function Dashboard() {
           font-semibold"
         >
           <LogOut size={18} />
-          <button className="cursor-pointer">Deslogar</button>
+          <button onClick={handleLogout} className="cursor-pointer">
+            Deslogar
+          </button>
         </div>
       </header>
 
@@ -120,5 +136,5 @@ export default function Dashboard() {
         onClose={() => setIsModalOpen(false)}
       />
     </section>
-  );
+  )
 }

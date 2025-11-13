@@ -1,11 +1,11 @@
-import { initializeApp } from "firebase/app";
+import { initializeApp } from "firebase/app"
 import {
   getAuth,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   updateProfile,
-} from "firebase/auth";
-import { getFirestore } from "firebase/firestore";
+} from "firebase/auth"
+import { getFirestore } from "firebase/firestore"
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
@@ -14,10 +14,10 @@ const firebaseConfig = {
   storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
   messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
   appId: import.meta.env.VITE_FIREBASE_APP_ID,
-};
+}
 
-const app = initializeApp(firebaseConfig);
-export const auth = getAuth(app);
+const app = initializeApp(firebaseConfig)
+export const auth = getAuth(app)
 
 export const registerUser = async (email, password, name) => {
   try {
@@ -25,18 +25,18 @@ export const registerUser = async (email, password, name) => {
       auth,
       email,
       password
-    );
-    const user = userCredential.user;
+    )
+    const user = userCredential.user
 
-    await updateProfile(user, { displayName: name });
-    return userCredential;
+    await updateProfile(user, { displayName: name })
+    return userCredential
   } catch (error) {
-    throw error;
+    throw error
   }
-};
+}
 
 export const loginUser = (email, password) => {
-  return signInWithEmailAndPassword(auth, email, password);
-};
+  return signInWithEmailAndPassword(auth, email, password)
+}
 
-export const db = getFirestore(app);
+export const db = getFirestore(app)
