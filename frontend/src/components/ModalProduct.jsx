@@ -1,9 +1,30 @@
-import InputData from "./InputData.jsx";
-import SelectFilter from "./SelectFilter.jsx";
-import PrimaryButton from "./PrimaryButton.jsx";
+import InputData from "./InputData.jsx"
+import SelectFilter from "./SelectFilter.jsx"
+import PrimaryButton from "./PrimaryButton.jsx"
+import { useState } from "react"
 
-export function ModalProduct({ isOpen, onClose }) {
-  if (!isOpen) return null;
+export function ModalProduct({ isOpen, onClose, onSave }) {
+  const [nome, setNome] = useState("")
+  const [preco, setPreco] = useState("")
+  const [tipo, setTipo] = useState("Mensal")
+  const [status, setStatus] = useState("Ativa")
+  const [vencimento, setVencimento] = useState("")
+  const [observacoes, setObservacoes] = useState("")
+
+  if (!isOpen) return null
+
+  function handleSalvar() {
+    const dados = {
+      nome,
+      preco: parseFloat(preco.replace(",", ".")),
+      tipo,
+      status,
+      vencimento,
+      observacoes,
+    }
+
+    onSave(dados)
+  }
 
   return (
     <section>
@@ -16,14 +37,38 @@ export function ModalProduct({ isOpen, onClose }) {
 
           {/* grid de inputs */}
           <div className="grid grid-cols-2 gap-4">
-            <InputData placeholder="Nome (ex: Netflix)" />
-            <InputData placeholder="Preço mensal" />
+            <InputData
+              placeholder="Nome (ex: Netflix)"
+              value={nome}
+              onChange={(e) => setNome(e.target.value)}
+            />
+            <InputData
+              placeholder="Preço mensal"
+              value={preco}
+              onChange={(e) => setPreco(e.target.value)}
+            />
 
-            <SelectFilter options={["Mensal", "Anual"]} defaultValue="Mensal" />
-            <SelectFilter options={["Ativa", "Pausada"]} defaultValue="Ativa" />
+            <SelectFilter
+              options={["Mensal", "Anual"]}
+              defaultValue={tipo}
+              onChange={(e) => setTipo(e.target.value)}
+            />
+            <SelectFilter
+              options={["Ativa", "Pausada"]}
+              defaultValue={status}
+              onChange={(e) => setStatus(e.target.value)}
+            />
 
-            <InputData placeholder="Data de vencimento" />
-            <InputData placeholder="Observações..." />
+            <InputData
+              placeholder="Data de cobrança"
+              value={vencimento}
+              onChange={(e) => setVencimento(e.target.value)}
+            />
+            <InputData
+              placeholder="Observações..."
+              value={observacoes}
+              onChange={(e) => setObservacoes(e.target.value)}
+            />
           </div>
 
           {/* botões */}
@@ -33,6 +78,7 @@ export function ModalProduct({ isOpen, onClose }) {
               width="28"
               heigth="11"
               textInputSize="sm"
+              onClick={handleSalvar}
             />
             <button
               onClick={onClose}
@@ -44,5 +90,5 @@ export function ModalProduct({ isOpen, onClose }) {
         </div>
       </div>
     </section>
-  );
+  )
 }

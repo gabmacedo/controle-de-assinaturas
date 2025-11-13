@@ -6,11 +6,15 @@ import ProductCard from "../components/ProductCard"
 import { ModalProduct } from "../components/ModalProduct"
 import { useState } from "react"
 import { signOut } from "firebase/auth"
-import { auth } from "../firebase"
+import { auth } from "../firebase/firebase.js"
 import { useNavigate } from "react-router-dom"
+import { criarAssinatura } from "../firebase/firebaseUtils.js"
+import { useAuth } from "../Context/AuthContext.jsx"
 
 export default function Dashboard() {
   const navigate = useNavigate()
+  const { user } = useAuth()
+  const [isModalOpen, setIsModalOpen] = useState(false)
 
   async function handleLogout() {
     try {
@@ -21,7 +25,15 @@ export default function Dashboard() {
     }
   }
 
-  const [isModalOpen, setIsModalOpen] = useState(false)
+  async function handleCriarAssinatura(dados) {
+    try {
+      await criarAssinatura(user.uid, dados)
+      console.log("assinatura criada")
+      setIsModalOpen(false)
+    } catch (error) {
+      console.error("erro ao criar:", error.code, error.message)
+    }
+  }
 
   return (
     <section className="min-h-screen w-screen bg-zinc-900 p-10 font-inter">
@@ -68,38 +80,6 @@ export default function Dashboard() {
               prodStatus="Ativa"
               prodPrice="29,90"
             />
-            <ProductCard
-              prodName="Spotify"
-              prodDesc="Premium"
-              prodDate="05"
-              prodPayment="Cobrança mensal"
-              prodStatus="Ativa"
-              prodPrice="16,90"
-            />
-            <ProductCard
-              prodName="Academia"
-              prodDesc="Plano Fit"
-              prodDate="21"
-              prodPayment="Cobrança mensal"
-              prodStatus="Pausada"
-              prodPrice="137,00"
-            />
-            <ProductCard
-              prodName="Adobe"
-              prodDesc="Creative Cloud"
-              prodDate="02"
-              prodPayment="Cobrança mensal"
-              prodStatus="Ativa"
-              prodPrice="120,00"
-            />
-            <ProductCard
-              prodName="ChatGPT"
-              prodDesc="Plano Plus"
-              prodDate="10"
-              prodPayment="Cobrança mensal"
-              prodStatus="Ativa"
-              prodPrice="100,00"
-            />
           </div>
         </div>
 
@@ -134,6 +114,7 @@ export default function Dashboard() {
       <ModalProduct
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
+        onSave={handleCriarAssinatura}
       />
     </section>
   )
