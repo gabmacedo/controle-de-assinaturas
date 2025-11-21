@@ -21,7 +21,7 @@ export default function Registro() {
         return
       }
 
-      if (nome.length >= 2) {
+      if (nome.length <= 2) {
         alert("Insira um nome válido.")
       }
 

@@ -45,6 +45,16 @@ export default function Dashboard() {
     }
   }
 
+  async function handleDeletarAssinaturas(id) {
+    try {
+      await deletarAssinatura(id)
+      const novoArray = assinaturas.filter((a) => a.id !== id)
+      setAssinaturas(novoArray)
+    } catch (error) {
+      console.error("erro ao deletar:", error.message)
+    }
+  }
+
   useEffect(() => {
     async function carregarAssinaturas() {
       if (!user?.uid) return
@@ -70,6 +80,7 @@ export default function Dashboard() {
           className="flex border border-zinc-500 text-white items-center 
           justify-center gap-3 p-3 rounded-2xl cursor-pointer w-36 hover:bg-zinc-800
           font-semibold"
+          onClick={handleLogout}
         >
           <LogOut size={18} />
           <button onClick={handleLogout} className="cursor-pointer">
@@ -110,6 +121,7 @@ export default function Dashboard() {
                   prodPayment={`Cobrança ${item.tipo.toLowerCase()}`}
                   prodStatus={item.status}
                   prodPrice={item.preco ? item.preco.toFixed(2) : "0.00"}
+                  onDelete={() => handleDeletarAssinaturas(item.id)}
                 />
               ))
             ) : (
