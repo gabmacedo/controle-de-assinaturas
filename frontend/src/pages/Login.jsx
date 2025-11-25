@@ -35,7 +35,7 @@ export default function Login() {
 
   return (
     <section className="min-h-screen w-screen flex font-inter">
-      {/* Lado esquerdo */}
+      {/* lado esquerdo */}
       <div className="bg-blue-600 w-1/2 flex flex-col justify-center px-20 text-white relative">
         <div
           className="h-96 w-full bg-white absolute bottom-0 left-0"
@@ -51,7 +51,7 @@ export default function Login() {
           </p>
         </div>
       </div>
-      {/* Lado direito */}
+      {/* lado direito */}
       <div className="bg-zinc-900 w-1/2 flex items-center justify-center">
         <div className="w-full max-w-md px-10 text-white flex flex-col">
           <h2 className="text-5xl font-semibold mb-8 text-left">Login</h2>

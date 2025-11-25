@@ -1,9 +1,9 @@
-import PrimaryButton from "./PrimaryButton";
-import { CircleCheck, ArrowUpRight } from "lucide-react";
-import { Link } from "react-router-dom";
+import PrimaryButton from "./PrimaryButton"
+import { CircleCheck, ArrowUpRight } from "lucide-react"
+import { Link } from "react-router-dom"
 
 export default function ModalSuccessful({ isOpen, onClose }) {
-  if (!isOpen) return null;
+  if (!isOpen) return null
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
@@ -22,5 +22,5 @@ export default function ModalSuccessful({ isOpen, onClose }) {
         </Link>
       </div>
     </div>
-  );
+  )
 }

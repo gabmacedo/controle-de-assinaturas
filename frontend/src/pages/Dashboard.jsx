@@ -55,6 +55,18 @@ export default function Dashboard() {
     }
   }
 
+  function mostrarTotal() {
+    return assinaturas
+      .filter((assinatura) => assinatura.status === "Ativa")
+      .reduce((total, a) => total + (a.preco || 0), 0)
+      .toFixed(2)
+  }
+
+  function mostrarAtivos() {
+    return assinaturas.filter((assinatura) => assinatura.status === "Ativa")
+      .length
+  }
+
   useEffect(() => {
     async function carregarAssinaturas() {
       if (!user?.uid) return
@@ -73,7 +85,7 @@ export default function Dashboard() {
 
   return (
     <section className="min-h-screen w-screen bg-zinc-900 p-10 font-inter">
-      {/* Header */}
+      {/* header */}
       <header className="flex justify-between items-center">
         <img src="./src/assets/logo.png" alt="Logo" className="h-10" />
         <div
@@ -89,9 +101,9 @@ export default function Dashboard() {
         </div>
       </header>
 
-      {/* Container principal */}
+      {/* container principal */}
       <div className="flex justify-between mt-10 gap-6 h-[70vh] relative">
-        {/* 🟩 Painel de assinaturas */}
+        {/* painel de assinaturas */}
         <div className="bg-zinc-800 border border-zinc-500 rounded-lg p-4 flex flex-col w-11/12">
           {/* filtros e pesquisa - FIXOS */}
           <div className="flex gap-2 mb-4 shrink-0 w-full">
@@ -132,7 +144,7 @@ export default function Dashboard() {
           </div>
         </div>
 
-        {/* 🟦 Painel de resumo */}
+        {/* painel de resumo */}
         <div className="bg-zinc-800 border border-zinc-500 rounded-lg p-5 w-1/2 flex flex-col justify-between h-[70vh]">
           <div>
             <h4 className="text-white text-2xl font-semibold mb-2">Resumo</h4>
@@ -140,14 +152,16 @@ export default function Dashboard() {
 
             <div className="text-zinc-300 text-sm space-y-2">
               <p>
-                <span className="font-semibold">Mensal (somado):</span> Em breve
+                <span className="font-semibold">Mensal (somado):</span>
+                {" R$ "}
+                {mostrarTotal()}
+              </p>
+              <p>
+                <span className="font-semibold">Assinaturas ativas:</span>{" "}
+                {mostrarAtivos()}
               </p>
               <p>
                 <span className="font-semibold">Gasto anual estimado:</span> Em
-                breve
-              </p>
-              <p>
-                <span className="font-semibold">Assinaturas ativas:</span> Em
                 breve
               </p>
             </div>

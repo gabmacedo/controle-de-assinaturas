@@ -40,7 +40,7 @@ export default function Registro() {
 
   return (
     <section className="min-h-screen w-screen flex font-inter">
-      {/* Lado esquerdo */}
+      {/* lado esquerdo */}
       <div className="bg-blue-600 w-1/2 flex flex-col justify-center px-20 text-white relative">
         <div
           className="h-96 w-full bg-white absolute bottom-0 left-0"
@@ -56,7 +56,7 @@ export default function Registro() {
           </p>
         </div>
       </div>
-      {/* Lado direito */}
+      {/* lado direito */}
       <div className="bg-zinc-900 w-1/2 flex items-center justify-center">
         <form onSubmit={handleRegistro}>
           <div className="w-full max-w-md px-10 text-white flex flex-col">
